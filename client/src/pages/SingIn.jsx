@@ -1,11 +1,18 @@
 import { useState } from 'react';
 import {  Link, useNavigate } from 'react-router-dom';
+import {useDispatch,useSelector} from 'react-redux';
+import { signInStart,signInFailure,signInSuccess } from '../redux/user/userSlice';
+
 
 function SingIn() {
   const [formData,setFormData] = useState({});
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  // const [error, setError] = useState(null);
+  // const [loading, setLoading] = useState(false);
+  const {loading,error} = useSelector((state)=>state.user);
+  console.log(loading);
+  console.log(error)
   const navigate = useNavigate();
+  const dispatch = useDispatch()
 
   const handleChange =(e)=>{
     setFormData({
@@ -17,7 +24,7 @@ function SingIn() {
   const handleSubmit =async(e)=>{
     e.preventDefault();
     try {
-      setLoading(true);
+      dispatch(signInStart());
       const res = await fetch('/api/auth/signin', {
         method: 'POST',
         headers: {
@@ -28,23 +35,20 @@ function SingIn() {
       const data = await res.json();
       console.log(data);
       if (data.success === false) {
-        setLoading(false);
-        setError(data.message);
+        dispatch(signInFailure(data.message));
         return;
       }
-      setLoading(false);
-      setError(null);
+      dispatch(signInSuccess(data));
       navigate('/');
 
     } catch (error) {
-      setLoading(false);
-      setError(error.message);
+      signInFailure(error.message);
     }
   }
 
   return (
     <div className='p-3 max-w-lg mx-auto'>
-      <h1 className='text-3xl text-center font-semibold my-7'>Sign Up</h1>
+      <h1 className='text-3xl text-center font-semibold my-7'>Sign In</h1>
       <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
         <input type="email" placeholder='email' className='border p-3 rounded-lg' id='email' onChange={handleChange} />
         <input type="password" placeholder='password' className='border p-3 rounded-lg' id='password' onChange={handleChange} />
@@ -61,5 +65,4 @@ function SingIn() {
 
   )
 }
-
 export default SingIn
