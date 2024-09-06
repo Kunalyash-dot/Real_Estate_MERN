@@ -45,7 +45,10 @@ const listingSchema = new mongoose.Schema(
     imageUrls:{
         type:Array,
         required:true,
-    },
+    },userRef: {
+        type: String,
+        required: true,
+      },
 },
 {timestamps:true}
 );
