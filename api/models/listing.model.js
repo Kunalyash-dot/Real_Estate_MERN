@@ -22,6 +22,10 @@ const listingSchema = new mongoose.Schema(
         type:Number,
         required: true,
     },
+    bedrooms:{
+        type: String,
+        required: true,
+    },
     bathrooms:{
         type: String,
         required: true,
