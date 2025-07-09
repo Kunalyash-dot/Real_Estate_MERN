@@ -36,6 +36,7 @@ function Profile() {
     }
   }, [file]);
 
+  console.log(formData)
   const handleFileUpload = (file) => {
     const storage = getStorage(app);
     const fileName = new Date().getTime() + file.name;
